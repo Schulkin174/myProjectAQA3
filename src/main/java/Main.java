@@ -20,9 +20,12 @@ public class Main {
             WebElement element = driver.findElement(By.id("draggable"));
             WebElement element2 = driver.findElement(By.id("droppable"));
 
-            Actions actions = new Actions(driver);
+            Actions actions = new Actions(driver); // создали экземпляр экшенс, будем перетаскивать один элемент в другой
 
             actions.moveToElement(element).clickAndHold().moveToElement(element2).release().build().perform();
+             // обращаемся к actions и начинаем вызывать методы: навести курсор, кликнуть и задержать, навести курсор, отпустить, собрать, запустить
+
+            // или же более простой метод: actions.dragAndDrop(); Он сделает всё автоматически.
 
         } catch (InterruptedException e) {
             e.printStackTrace();
