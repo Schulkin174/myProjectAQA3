@@ -4,6 +4,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import java.time.Duration;
 
 public class Main {
@@ -15,19 +25,19 @@ public class Main {
 
         try {
             driver.get("https://crossbrowsertesting.github.io/drag-and-drop");
-            Thread.sleep(2000);
+            Thread.sleep(5000);
 
             WebElement element = driver.findElement(By.id("draggable"));
             WebElement element2 = driver.findElement(By.id("droppable"));
 
-            Actions actions = new Actions(driver); // создали экземпляр экшенс, будем перетаскивать один элемент в другой
-
+            Actions actions = new Actions(driver);
             actions.moveToElement(element).clickAndHold().moveToElement(element2).release().build().perform();
-             // обращаемся к actions и начинаем вызывать методы: навести курсор, кликнуть и задержать, навести курсор, отпустить, собрать, запустить
 
-            // или же более простой метод: actions.dragAndDrop(); Он сделает всё автоматически.
+            // Создание скриншота после выполнения действий
+            String screenshotPath = "D:\\screenshots\\test_screenshot.png";
+            createScreenshot(screenshotPath);
 
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | AWTException | IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -37,5 +47,16 @@ public class Main {
             }
             driver.quit();
         }
+    }
+
+    public static void createScreenshot(String filePath) throws AWTException, IOException {
+        Robot robot = new Robot();
+        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+        BufferedImage screenshot = robot.createScreenCapture(screenRect);
+
+        File file = new File(filePath);
+        ImageIO.write(screenshot, "png", file);
+
+        System.out.println("Скриншот успешно сохранен в " + filePath);
     }
 }
